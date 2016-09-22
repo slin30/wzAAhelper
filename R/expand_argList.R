@@ -111,7 +111,7 @@ expand_argList <- function(baseList, targName, expandList, how = c("append", "re
     how <- "append"
   }
   if(depth(baseList) != 1 || depth(expandList) != 1) {
-    stop("baseList and expandList must both unnested lists, i.e. of depth 1")
+    stop("baseList and expandList must both be unnested lists, i.e. of depth 1")
   }
   if(length(targName) != 1) {
     stop("targName argument must be of length 1")

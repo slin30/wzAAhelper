@@ -15,8 +15,8 @@ npartition_argList(baseList, n, chunkLimit = NULL)
 \link[wzMisc]{make_chunks}. Pre-set to 50K and should be left as-is.}
 }
 \value{
-A nested list of length equal to \code{baseList[["top"]]/n}. If not present, an argument of "start" will
-be appended to enable data fetching indexing.
+A nested list of length equal to \code{(baseList[["top"]]/n) + (baseList[["top"]] \%\% n)}.
+If not present, an argument of "start" will be appended to enable data fetching indexing.
 
 It is helpful to use the outputs in conjunction with the \code{enqueueOnly=TRUE} argument most
 \code{\link[RSiteCatalyst]{RSiteCatalyst}} call constructors support, not only for

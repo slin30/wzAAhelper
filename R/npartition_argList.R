@@ -33,8 +33,8 @@
 #' level of nesting, as this is usually clearer than creating nested lists of depth >= 3.
 #'
 #' @return
-#' A nested list of length equal to \code{baseList[["top"]]/n}. If not present, an argument of "start" will
-#' be appended to enable data fetching indexing.
+#' A nested list of length equal to \code{(baseList[["top"]]/n) + (baseList[["top"]] \%\% n)}.
+#' If not present, an argument of "start" will be appended to enable data fetching indexing.
 #'
 #' It is helpful to use the outputs in conjunction with the \code{enqueueOnly=TRUE} argument most
 #' \code{\link[RSiteCatalyst]{RSiteCatalyst}} call constructors support, not only for
