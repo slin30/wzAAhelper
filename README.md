@@ -9,14 +9,14 @@ This package has select dependencies on [wzMisc](https://github.com/slin30/wzMis
 
 You will need to first install the `devtools` package, if you do not have it:
 
-```
+```r{}
 # If you do not have it already, devtools installation:    
 install.packages("devtools")
 ```
 
 Once this is complete, install the dependent package in any R session:  
 
-```
+```{r}
 devtools::install_github("slin30/wzMisc")
 ```
 
@@ -29,13 +29,14 @@ had time to look into this yet, so for now, please use the manual approach:
     
 Use the following code chunk:  
 
-```
+```{r}
 install.packages(path_to_file, repos = NULL, type="source")
 #For example:
-#don't run
+# dontrun{
 # install.packages("C:/Users/zhang2/Downloads/wzaahelper-c9f847b34244629f4e8af95173c0c939d0f287a6.tar.gz", 
 #                  repos = NULL, 
 #                  type="source")
+# }
 ```
 
 -----
