@@ -4,8 +4,10 @@
 
 ### How to install
 
-This package has select dependencies on wzMisc, which is a public package (by me) hosted on my personal
-github account. You will need to first install the `devtools` package, if you do not have it:
+This package has select dependencies on [wzMisc](https://github.com/slin30/wzMisc), which is a public package built by me 
+(@zhang1) hosted on my personal github account. 
+
+You will need to first install the `devtools` package, if you do not have it:
 
 ```
 # If you do not have it already, devtools installation:    
