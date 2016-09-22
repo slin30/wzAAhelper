@@ -1,14 +1,14 @@
-#wzAAhelper
+# wzAAhelper
 
-##Functions to make RSiteCatalyst API usage less painful
+## Functions to make RSiteCatalyst API usage less painful
 
-###How to install
+### How to install
 
 This package has select dependencies on wzMisc, which is a public package (by me) hosted on my personal
 github account. You will need to first install the `devtools` package, if you do not have it:
 
 ```
-#If you do not have it already, devtools installation:    
+# If you do not have it already, devtools installation:    
 install.packages("devtools")
 ```
 
@@ -37,5 +37,3 @@ install.packages(path_to_file, repos = NULL, type="source")
 ```
 
 -----
-
-    
