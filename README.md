@@ -9,7 +9,7 @@ This package has select dependencies on [wzMisc](https://github.com/slin30/wzMis
 
 You will need to first install the `devtools` package, if you do not have it:
 
-```r{}
+```{r}
 # If you do not have it already, devtools installation:    
 install.packages("devtools")
 ```
@@ -27,10 +27,10 @@ had time to look into this yet, so for now, please use the manual approach:
 2. Download the tar.gz (even if you are running Windows)
 3. Open an R session; probably most convenient to open the session in the file download location.  
     
-Use the following code chunk:  
+Modify the following code chunk:  
 
 ```{r}
-install.packages(path_to_file, repos = NULL, type="source")
+# install.packages(path_to_file, repos = NULL, type="source")
 #For example:
 # dontrun{
 # install.packages("C:/Users/zhang2/Downloads/wzaahelper-c9f847b34244629f4e8af95173c0c939d0f287a6.tar.gz", 
