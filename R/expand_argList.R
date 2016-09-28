@@ -3,12 +3,13 @@
 #' For a specific named arg in a list of args, expand the latter based on list of specific args
 #' @importFrom wzMisc depth
 #' @param baseList named list of args. Must be unnested, i.e. single-level
-#' @param targName chr vector of length 1
-#' @param expandList named list of args to expand \code{baseList}. Must be unnested, i.e. single-level
+#' @param targName chr vector of length 1 denoting what arg to modify, or if name is not found in \emph{baseList},
+#'        what the added element should be named.
+#' @param expandList named list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level
 #' @param how \code{append} (default) or \code{replace} \emph{targName} value(s)?
 #'
 #' @details
-#' Take a single list of baseline arguments and expand them based on a (named) list of values.
+#' Take a single list of baseline arguments and expand them based on a (named) list or vector of values.
 #' Here, expand means that the input (baseline) list is replicated to length \emph{n},
 #' where \code{n == length(expandList)}.
 #'
@@ -107,27 +108,35 @@
 #' lst_expanded_replace <- expand_argList(my_baseList, "segment.id", my_expandList, how = "replace")
 #' purrr::transpose(lst_expanded_replace)[["segment.id"]]
 expand_argList <- function(baseList, targName, expandList, how = c("append", "replace")) {
-  if(missing(how)) {
-    how <- "append"
+
+  if(!is.list(expandList)) {
+    expandList <- as.list(expandList)
   }
+
   if(depth(baseList) != 1 || depth(expandList) != 1) {
     stop("baseList and expandList must both be unnested lists, i.e. of depth 1")
   }
   if(length(targName) != 1) {
     stop("targName argument must be of length 1")
   }
-  if(!purrr::every(names(expandList), function(f) f != "")) {
+  if(any(names(expandList) == "") | anyNA(names(expandList))) {
     stop("\r", substitute(expandList),
          " contains unnamed elements.\r\n",
          "All elements of targName must be named to avoid ambiguous output")
   }
-  if(!purrr::every(names(baseList), function(f) f != "")) {
+  if(any(names(baseList) == "") | anyNA(names(baseList))) {
     warning(substitute(baseList), " elements are not all named")
   }
   if(!targName %in% names(baseList)) {
     warning(targName, " not found in ", substitute(baseList),
             "\rAdding ", targName, " as an additional argument")
   }
+
+
+  if(missing(how)) {
+    how <- "append"
+  }
+
   targ <- baseList[[targName]]
   if(how == "append") {
     multi_targ <- lapply(expandList, function(f) c(f, targ))

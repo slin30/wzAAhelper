@@ -9,9 +9,10 @@ expand_argList(baseList, targName, expandList, how = c("append", "replace"))
 \arguments{
 \item{baseList}{named list of args. Must be unnested, i.e. single-level}
 
-\item{targName}{chr vector of length 1}
+\item{targName}{chr vector of length 1 denoting what arg to modify, or if name is not found in \emph{baseList},
+what the added element should be named.}
 
-\item{expandList}{named list of args to expand \code{baseList}. Must be unnested, i.e. single-level}
+\item{expandList}{named list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level}
 
 \item{how}{\code{append} (default) or \code{replace} \emph{targName} value(s)?}
 }
@@ -30,7 +31,7 @@ to resolve with \link[purrr]{lift}, specifically \link[purrr]{lift_dl}, e.g.
 For a specific named arg in a list of args, expand the latter based on list of specific args
 }
 \details{
-Take a single list of baseline arguments and expand them based on a (named) list of values.
+Take a single list of baseline arguments and expand them based on a (named) list or vector of values.
 Here, expand means that the input (baseline) list is replicated to length \emph{n},
 where \code{n == length(expandList)}.
 
