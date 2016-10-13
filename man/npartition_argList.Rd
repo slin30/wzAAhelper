@@ -18,12 +18,16 @@ npartition_argList(baseList, n, chunkLimit = NULL)
 A nested list of length equal to \code{(baseList[["top"]]/n) + (baseList[["top"]] \%\% n)}.
 If not present, an argument of "start" will be appended to enable data fetching indexing.
 
+If \code{length(baseList[["top"]]) > 1} is \code{TRUE}, the resulting chunks will preserve
+values beyond the first. The "start" argument for each chunk will always be of length 1, as the
+API will only apply "start" to the first element of "top."
+
 It is helpful to use the outputs in conjunction with the \code{enqueueOnly=TRUE} argument most
 \code{\link[RSiteCatalyst]{RSiteCatalyst}} call constructors support, not only for
 performance, but also general organization.
 }
 \description{
-Take a base argument List with a "top" arg and partition into n chunks
+Take a base argument list with a "top" arg and partition into n chunks
 }
 \details{
 There are three distinct uses for this function; the first two are the most important:
@@ -64,5 +68,45 @@ npartition_argList(my_baseList, n = 3) #not very efficient, see:
 unlist(Map("[", npartition_argList(my_baseList, n = 3), "top"))
 npartition_argList(my_baseList, n = 4)
 
+#with top values >1L
+my_baseList_2 <- list(
+reportsuite.id = "myID",
+date.from = "2016-09-01",
+date.to = "2016-09-02",
+elements = c("my_element_1", "my_element_2"),
+metrics = c("pageviews", "visits"),
+segment.id = c("segment1", "segment2"),
+date.granularity = "month",
+top = c(100000, 10))
+
+npartition_argList(my_baseList_2, n = 2)
+
+#Error if length top != length elements, if length top > 1 OR length elements > 1
+\dontrun{
+
+# length 2 top, length 1 elements
+bad_list_1 <- list(
+reportsuite.id = "myID",
+date.from = "2016-09-01",
+date.to = "2016-09-02",
+elements = c("my_element_1"),
+metrics = c("pageviews", "visits"),
+date.granularity = "month",
+top = c(100000, 10))
+
+npartition_argList(bad_list_1, n = 2)
+
+# length 1 top, length 2 elements
+bad_list_2 <- list(
+reportsuite.id = "myID",
+date.from = "2016-09-01",
+date.to = "2016-09-02",
+elements = c("my_element_1", "my_element_2"),
+metrics = c("pageviews", "visits"),
+date.granularity = "month",
+top = c(100000))
+
+npartition_argList(bad_list_2, n = 2)
+}
 }
 

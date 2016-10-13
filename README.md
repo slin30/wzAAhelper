@@ -2,6 +2,8 @@
 
 ## Functions to make RSiteCatalyst API usage less painful
 
+Version 0.0.0.9100
+
 ### How to install
 
 This package has select dependencies on [wzMisc](https://github.com/slin30/wzMisc), which is a public package built by me 

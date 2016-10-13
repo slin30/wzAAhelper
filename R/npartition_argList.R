@@ -1,6 +1,6 @@
 #' Partition a single top arg into n chunks
 #'
-#' Take a base argument List with a "top" arg and partition into n chunks
+#' Take a base argument list with a "top" arg and partition into n chunks
 #'
 #' @importFrom wzMisc depth
 #' @importFrom wzMisc make_chunks
@@ -36,6 +36,10 @@
 #' A nested list of length equal to \code{(baseList[["top"]]/n) + (baseList[["top"]] \%\% n)}.
 #' If not present, an argument of "start" will be appended to enable data fetching indexing.
 #'
+#' If \code{length(baseList[["top"]]) > 1} is \code{TRUE}, the resulting chunks will preserve
+#' values beyond the first. The "start" argument for each chunk will always be of length 1, as the
+#' API will only apply "start" to the first element of "top."
+#'
 #' It is helpful to use the outputs in conjunction with the \code{enqueueOnly=TRUE} argument most
 #' \code{\link[RSiteCatalyst]{RSiteCatalyst}} call constructors support, not only for
 #' performance, but also general organization.
@@ -58,26 +62,101 @@
 #' unlist(Map("[", npartition_argList(my_baseList, n = 3), "top"))
 #' npartition_argList(my_baseList, n = 4)
 #'
+#' #with top values >1L
+#' my_baseList_2 <- list(
+#' reportsuite.id = "myID",
+#' date.from = "2016-09-01",
+#' date.to = "2016-09-02",
+#' elements = c("my_element_1", "my_element_2"),
+#' metrics = c("pageviews", "visits"),
+#' segment.id = c("segment1", "segment2"),
+#' date.granularity = "month",
+#' top = c(100000, 10))
+#'
+#' npartition_argList(my_baseList_2, n = 2)
+#'
+#' #Error if length top != length elements, if length top > 1 OR length elements > 1
+#' \dontrun{
+#'
+#' # length 2 top, length 1 elements
+#' bad_list_1 <- list(
+#' reportsuite.id = "myID",
+#' date.from = "2016-09-01",
+#' date.to = "2016-09-02",
+#' elements = c("my_element_1"),
+#' metrics = c("pageviews", "visits"),
+#' date.granularity = "month",
+#' top = c(100000, 10))
+#'
+#' npartition_argList(bad_list_1, n = 2)
+#'
+#' # length 1 top, length 2 elements
+#' bad_list_2 <- list(
+#' reportsuite.id = "myID",
+#' date.from = "2016-09-01",
+#' date.to = "2016-09-02",
+#' elements = c("my_element_1", "my_element_2"),
+#' metrics = c("pageviews", "visits"),
+#' date.granularity = "month",
+#' top = c(100000))
+#'
+#' npartition_argList(bad_list_2, n = 2)
+#' }
 npartition_argList <- function(baseList, n, chunkLimit = NULL) {
   if(is.null(chunkLimit)) {
     chunkLimit <- 5E4
   }
-  if(is.null(baseList[["top"]])) {
-    stop("A non-null value for the named argument 'top' must be present in baseList")
-  }
+
   if(depth(baseList) != 1) {
     stop("baseList must be a non-nested list, i.e. of depth 1")
   }
+
+  if(is.null(baseList[["top"]])) {
+    stop("A non-null value for the named argument 'top' must be present in baseList")
+  }
+
+  topLen    <- length(baseList[["top"]])
+  elemCheck <- is.null(baseList$element)
+  elemLen <- if(!elemCheck) {
+    length(baseList$element)
+  } else NULL
+
+  #warn if topLen is > length of elements, if topLen > 1
+  if(topLen > 1 && is.null(elemLen)) {
+    warning(paste(strwrap("Length of 'top' argument is > 1 but element(s) arg is
+                          missing. 'top' arguments > length 1 are usually valid only when
+                          there are element(s) arguments of equal length",
+                          width = 80, indent = 0, exdent = 2),
+                  collapse = "\n")
+    )
+  }
+
+  if(!is.null(elemLen))
+    if(elemLen != topLen) {
+      stop(paste(strwrap(
+        "Length of 'top' argument is not equal to length of
+        'element' argument. Standard recycling rules may
+        result in ambiguity when partitioning in such scenarios
+        Please supply a vector of 'top' equal in length to 'element(s)'",
+        width = 80, indent = 0, exdent = 2),
+        collapse = "\n")
+      )
+    }
+
   if(length(n) != 1) {
     stop("n must be of length 1")
   }
 
-  tot <- as.integer(baseList[["top"]])
+  tot <- as.integer(baseList[["top"]][[1]])
   #generate chunk df
   chunks <- make_chunks(tot, chunk_size = tot/n, limit = chunkLimit)
 
   start_xpandChunk <- as.list(chunks[["from"]])
   top_xpandChunk   <- as.list(chunks[["size"]])
+
+  #capture additional, append to top_xpandChunk
+  addtl <- as.integer(baseList[["top"]][-1])
+  top_xpandChunk <- lapply(top_xpandChunk, function(f) c(f, addtl))
 
   chunk_names <- paste0("chunk", seq_len(nrow(chunks)))
 
