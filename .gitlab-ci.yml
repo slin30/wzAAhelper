@@ -1,4 +1,6 @@
 image: rocker/r-base  
+services: 
+    - gitlab-runner
 test:  
    script:
     - R -e 'install.packages(c("devtools", "testthat", "roxygen2"))'
