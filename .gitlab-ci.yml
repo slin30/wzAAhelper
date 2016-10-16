@@ -4,10 +4,11 @@ before_script:
     - apt-get update -y
     - apt-get install libssl-dev -y
     - apt-get install libcurl4-openssl-dev -y
+    - apt-get install libssh2-1-dev -y
 
 test:  
    script:
-    - R -e 'install.packages(c("devtools", "testthat"))'
+    - R -e 'install.packages(c("devtools", "testthat", "roxygen2"))'
     - R CMD build . --no-build-vignettes --no-manual
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
