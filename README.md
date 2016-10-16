@@ -47,7 +47,7 @@ Modify the following code chunk:
 ### CI setup notes and caveats
 
 Gitlab integrates with Docker for CI (continuous integration), to streamline package installation testing, among many other 
-tasts. At the moment, this is not quite straightforward. This section is mainly to capture setup notes and will be updated as 
+tasks. At the moment, this is not quite straightforward. This section is mainly to capture setup notes and will be updated as 
 I figure out how to streamline the CI workflow.  
 
 Any CI setup requires two things at minimum:  
@@ -95,11 +95,14 @@ Next, you will want to:
 
 
 From here, it is a matter of testing the various configuration commands in your .yml file, which can/should include other 
-scripts to better handle dependencies, such as shell scripts. At the moment, I am being lazy and including these commands in 
-the `before_test` section.  
+scripts to better handle dependencies, such as shell scripts. 
 
-Once complete, and passed, you may wish to push your docker configuration to dockerhub for re-use and efficiency. I have also 
-not done this yet.  
+Once complete, and passed, you may wish to push your docker configuration to dockerhub for re-use and efficiency. Using the 
+correct image can make a significant difference. For example, with r-base, additional `apt-get` args are required in either 
+the yml or in a shell script sourced by the yml, in addition to installation of a few rather heavy packages. In total, this 
+amounts to >9 minutes of test time. With `rocker/hadleyverse`, which comes pre-loaded with the required packages, the 
+system dependencies and package installs are no longer required, and this cuts test time to ~1 minute. 
+
 
 #### Once you successfully set up CI
 
