@@ -1,7 +1,8 @@
-image: rocker/r-base  
+image: r-base  
 test:  
    script:
-    - R -e 'install.packages(c("devtools", "testthat", "roxygen2"))'
+    - R -e 'install.packages(c("devtools", "testthat", "roxygen2", 
+    "Rcpp", "httr", "git2r"))'
     - R CMD build . --no-build-vignettes --no-manual
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
