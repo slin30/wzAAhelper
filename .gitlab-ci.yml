@@ -2,9 +2,6 @@ image: rocker/hadleyverse
 
 before_script:
     - apt-get update -y
-    - apt-get install libssl-dev -y
-    - apt-get install libcurl4-openssl-dev -y
-    - apt-get install libssh2-1-dev -y
 
 test:  
    script:
