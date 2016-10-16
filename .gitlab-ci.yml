@@ -8,7 +8,8 @@ before_script:
 
 test:  
    script:
-    - R -e 'install.packages(c("devtools", "testthat", "roxygen2"))'
+    - R -e 'install.packages(c("devtools", "testthat", "roxygen2", "purrr"))'
+    - R -e 'devtools::install_github("slin30/wzMisc")'
     - R CMD build . --no-build-vignettes --no-manual
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
