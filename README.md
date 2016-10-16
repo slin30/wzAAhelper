@@ -77,7 +77,8 @@ If you are on Windows 7, here is the official general process:
 This installs, among other things, a VirtualBox application on your local system. This is really what you are looking for, and 
 you can probably bypass the actual docker toolbox install altogether, although you may wish to verify that whatever version 
 of VirtualBox you self-install is at least the same version as used by the docker toolbox.  
-
+  
+  
 Next, you will want to:  
 
 - Download a Linux distro image, e.g. [Ubuntu](https://www.ubuntu.com/download/desktop)
@@ -101,7 +102,7 @@ Once complete, and passed, you may wish to push your docker configuration to doc
 correct image can make a significant difference. For example, with r-base, additional `apt-get` args are required in either 
 the yml or in a shell script sourced by the yml, in addition to installation of a few rather heavy packages. In total, this 
 amounts to >9 minutes of test time. With `rocker/hadleyverse`, which comes pre-loaded with the required packages, the 
-system dependencies and package installs are no longer required, and this cuts test time to ~1 minute. 
+system dependencies and package installs are no longer required, and this cuts test time to <1 minute. 
 
 
 #### Once you successfully set up CI
