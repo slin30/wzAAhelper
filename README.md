@@ -44,7 +44,7 @@ Modify the following code chunk:
 -----
 
 
-###CI setup notes and caveats
+### CI setup notes and caveats
 
 Gitlab integrates with Docker for CI (continuous integration), to streamline package installation testing, among many other 
 tasts. At the moment, this is not quite straightforward. This section is mainly to capture setup notes and will be updated as 
@@ -101,7 +101,7 @@ the `before_test` section.
 Once complete, and passed, you may wish to push your docker configuration to dockerhub for re-use and efficiency. I have also 
 not done this yet.  
 
-####Once you successfully set up CI
+#### Once you successfully set up CI
 
 1. Each push to your repo will trigger an automated test and status message.  
 2. If your Docker instance is local, as mine currently is, your runner will depend on the local system + VirtualBox Unix 
