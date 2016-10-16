@@ -1,4 +1,4 @@
-image: rocker/r-base  
+image: rocker/hadleyverse  
 
 before_script:
     - apt-get update -y
