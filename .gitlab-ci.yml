@@ -1,4 +1,4 @@
-image: rocker/r-base  
+image: r-base  
 test:  
    script:
     - R -e 'install.packages(c("devtools", "testthat", "roxygen2"))'
