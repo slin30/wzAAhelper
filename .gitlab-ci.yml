@@ -1,7 +1,13 @@
 image: rocker/r-base  
+
+before_script:
+    - apt-get update
+    - apt-get install libssl-dev
+    - apt-get install libcurl4-openssl-dev
+
 test:  
    script:
-    - R -e 'install.packages(c("devtools", "testthat"))'
+    - R -e 'install.packages(c("devtools", "testthat"))
     - R CMD build . --no-build-vignettes --no-manual
     - PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
     - R CMD check "${PKG_FILE_NAME}" --no-build-vignettes --no-manual
