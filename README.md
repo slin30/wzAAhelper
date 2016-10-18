@@ -65,7 +65,10 @@ best bet is to start with the [documentation](https://gitlab.com/gitlab-org/gitl
 even with the very thorough instructions, this is a non-trivial task, and I strongly suggest using a Unix environment. In 
 fact, I have not yet figured out how to make this work in Windows.  
 
-**NOTE: I have also not verified that this will work smoothly on Corporate-owned equipment, even with local admin**
+**NOTE: I have also not verified that this will work smoothly on Corporate-owned equipment, even with local admin**  
+  
+**NOTE: This also seems to not work on the corporate network, or the guest network, likely due to port/service restrictions. 
+Use your personal cell phone hotspot or an alternate secure network if you receive an unable to contact error**
 
 If you are on Windows 7, here is the official general process:  
 
