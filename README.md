@@ -60,7 +60,7 @@ Any CI setup requires two things at minimum:
       this repository.  
 
 
-To enable communication between #1 and #2, there are additional dependencies. For gitlab, this is a *runner*. Your 
+To enable communication between *#*1 and *#*2, there are additional dependencies. For gitlab, this is a *runner*. Your 
 best bet is to start with the [documentation](https://gitlab.com/gitlab-org/gitlab-ci-multi-runner), but be warned that 
 even with the very thorough instructions, this is a non-trivial task, and I strongly suggest using a Unix environment. In 
 fact, I have not yet figured out how to make this work in Windows.  
@@ -110,5 +110,5 @@ system dependencies and package installs are no longer required, and this cuts t
 1. Each push to your repo will trigger an automated test and status message.  
 2. If your Docker instance is local, as mine currently is, your runner will depend on the local system + VirtualBox Unix 
 instance being active, and the gitlab-ci-multi-runner service running. Otherwise, your test will remain in 'pending' status 
-unitl the CI service is back up and accessible.  
+until the CI service is back up and accessible.  
 
