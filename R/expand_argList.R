@@ -124,6 +124,18 @@ expand_argList <- function(baseList, targName, expandList, how = c("append", "re
          " contains unnamed elements.\r\n",
          "All elements of targName must be named to avoid ambiguous output")
   }
+  if(all(is.null(names(expandList)))) {
+    val_uniquecheck <- anyDuplicated(expandList)
+    if(val_uniquecheck == FALSE) {
+      message("expandList did not contain any names but all values are unique.\r\n",
+              "Using values of expandList as names")
+      names(expandList) <- expandList
+    } else {
+      message("expandList did not contain any names and there are duplicate values.\r\n",
+              "Using values of expandList as names via make.unique")
+      names(expandList) <- make.unique(unlist(expandList))
+    }
+  }
   if(any(names(baseList) == "") | anyNA(names(baseList))) {
     warning(substitute(baseList), " elements are not all named")
   }
