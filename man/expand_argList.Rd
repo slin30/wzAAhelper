@@ -12,20 +12,24 @@ expand_argList(baseList, targName, expandList, how = c("append", "replace"))
 \item{targName}{chr vector of length 1 denoting what arg to modify, or if name is not found in \emph{baseList},
 what the added element should be named.}
 
-\item{expandList}{named list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level}
+\item{expandList}{list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level.
+Must be (all) named or (all) unnamed. If named, \code{""} and \code{NA} are not allowed as names.}
 
 \item{how}{\code{append} (default) or \code{replace} \emph{targName} value(s)?}
 }
 \value{
 A named nested list of length \emph{expandList}, with each first-level element containing the elements
 of \emph{baseList}, modified as defined by \emph{targName} and \emph{expandList}.
-Names are taken from the names of \emph{expandList}.
+Names are taken from the names of \emph{expandList} if provided, otherwise will use values as names,
+uniquified via \code{\link{make.unique}} if necessary.
 
 IMPORTANT: Your output list of args may not be immediately usable with API calls. This if usually easy
 to resolve with \link[purrr]{lift}, specifically \link[purrr]{lift_dl}, e.g.
 \itemize{
 \item \code{lifted_fun <- purrr::lift_dl(RSiteCatalyst::QueueTrended)}
 }
+
+Alternatively use \code{\link{do.call}}.
 }
 \description{
 For a specific named arg in a list of args, expand the latter based on list of specific args

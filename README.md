@@ -2,7 +2,7 @@
 
 ## Functions to make RSiteCatalyst API usage less painful
 
-Version 0.0.0.9100
+Version 0.0.0.9101
 
 ### How to install
 
