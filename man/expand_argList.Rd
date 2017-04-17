@@ -122,4 +122,3 @@ purrr::transpose(lst_expanded)[["segment.id"]]
 lst_expanded_replace <- expand_argList(my_baseList, "segment.id", my_expandList, how = "replace")
 purrr::transpose(lst_expanded_replace)[["segment.id"]]
 }
-
