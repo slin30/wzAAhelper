@@ -2,6 +2,8 @@
 #'
 #' Automatically check the current queue at pre-determined time intervals
 #'
+#' @importFrom RSiteCatalyst GetQueue
+#'
 #' @param base (optional) numeric vector of length 1. The base to use to (exponentially) increment
 #' wait times between iterations. Defaults to \code{2}
 #' @param max_wait (optional) numeric vector of length 1. The max interval, in seconds, to wait between

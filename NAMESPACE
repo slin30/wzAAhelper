@@ -2,6 +2,10 @@
 
 export(check_Queue)
 export(expand_argList)
+export(make_monthChunks)
 export(npartition_argList)
+importFrom(RSiteCatalyst,GetQueue)
+importFrom(lubridate,days_in_month)
+importFrom(lubridate,ymd)
 importFrom(wzMisc,depth)
 importFrom(wzMisc,make_chunks)

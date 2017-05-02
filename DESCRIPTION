@@ -1,13 +1,15 @@
 Package: wzAAhelper
 Title: RSiteCatalyst helper functions
-Version: 0.0.0.9101
+Version: 0.0.0.9102
 Authors@R: person("Wen", "Zhang", email = "w.zhang.1@elsevier.com", role = c("aut", "cre"))
-Description: Simplify query construction and more for RSiteCatalst API.
+Description: Simplify query construction and more for RSiteCatalyst API.
 Depends:
     R (>= 3.3.1)
 Imports:
     purrr,
-    wzMisc
+    wzMisc,
+    RSiteCatalyst, 
+    lubridate
 Remotes: slin30/wzMisc
 License: GPL-3
 Encoding: UTF-8
