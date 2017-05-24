@@ -1,10 +1,10 @@
 Package: wzAAhelper
 Title: RSiteCatalyst helper functions
-Version: 0.0.0.9102
+Version: 0.0.0.9103
 Authors@R: person("Wen", "Zhang", email = "w.zhang.1@elsevier.com", role = c("aut", "cre"))
 Description: Simplify query construction and more for RSiteCatalyst API.
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.3.3)
 Imports:
     purrr,
     wzMisc,
