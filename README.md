@@ -1,3 +1,5 @@
+[![build status](https://git.cm-elsevier.com/zhang1/wzaahelper/badges/master/build.svg)](https://git.cm-elsevier.com/zhang1/wzaahelper/commits/master)
+
 # wzAAhelper
 
 ## Functions to make RSiteCatalyst API usage less painful
