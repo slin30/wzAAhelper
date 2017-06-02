@@ -50,8 +50,8 @@ enqueue_batch <- function(argList, fun = "QueueRanked", use_names = TRUE, auto_e
   lstLEN <- length(argList)
 
   # input structure check
-  if(wzMisc::depth(argList) != 2L) {
-    stop("Expected a nested list of depth 2, but depth of argList is ",
+  if(wzMisc::depth(argList) < 2L) {
+    stop("Expected a nested list of depth >= 2, but depth of argList is ",
          wzMisc::depth(argList))
   }
 
