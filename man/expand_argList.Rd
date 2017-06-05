@@ -4,7 +4,8 @@
 \alias{expand_argList}
 \title{Make multiple argument lists from a single arglist}
 \usage{
-expand_argList(baseList, targName, expandList, how = c("append", "replace"))
+expand_argList(baseList, targName, expandList, how = c("append", "replace"),
+  ignore_depth = FALSE)
 }
 \arguments{
 \item{baseList}{named list of args. Must be unnested, i.e. single-level}
@@ -16,6 +17,9 @@ what the added element should be named.}
 Must be (all) named or (all) unnamed. If named, \code{""} and \code{NA} are not allowed as names.}
 
 \item{how}{\code{append} (default) or \code{replace} \emph{targName} value(s)?}
+
+\item{ignore_depth}{(optional) length 1 logical. Bypass the depth (nesting) check? Useful in certain
+circumstances.}
 }
 \value{
 A named nested list of length \emph{expandList}, with each first-level element containing the elements

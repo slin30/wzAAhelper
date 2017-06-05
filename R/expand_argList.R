@@ -8,6 +8,8 @@
 #' @param expandList list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level.
 #'        Must be (all) named or (all) unnamed. If named, \code{""} and \code{NA} are not allowed as names.
 #' @param how \code{append} (default) or \code{replace} \emph{targName} value(s)?
+#' @param ignore_depth (optional) length 1 logical. Bypass the depth (nesting) check? Useful in certain
+#' circumstances.
 #'
 #' @details
 #' Take a single list of baseline arguments and expand them based on a (named) list or vector of values.
@@ -111,13 +113,13 @@
 #' #Replace segment.id element
 #' lst_expanded_replace <- expand_argList(my_baseList, "segment.id", my_expandList, how = "replace")
 #' purrr::transpose(lst_expanded_replace)[["segment.id"]]
-expand_argList <- function(baseList, targName, expandList, how = c("append", "replace")) {
+expand_argList <- function(baseList, targName, expandList, how = c("append", "replace"), ignore_depth = FALSE) {
 
   if(!is.list(expandList)) {
     expandList <- as.list(expandList)
   }
 
-  if(depth(baseList) != 1 || depth(expandList) != 1) {
+  if(ignore_depth == FALSE && (depth(baseList) != 1 | depth(expandList) != 1)) {
     stop("baseList and expandList must both be unnested lists, i.e. of depth 1")
   }
   if(length(targName) != 1) {
