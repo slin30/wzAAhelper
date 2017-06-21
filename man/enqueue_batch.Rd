@@ -5,7 +5,7 @@
 \title{Batch enqueue and pull RSiteCatalyst Queue* reports}
 \usage{
 enqueue_batch(argList, fun = "QueueRanked", use_names = TRUE,
-  auto_enqueue = TRUE, ...)
+  auto_enqueue = TRUE, enqueue_only = FALSE, ...)
 }
 \arguments{
 \item{argList}{(required) A (nested) list of named arguments to pass to \emph{fun}}
@@ -21,17 +21,25 @@ enqueue_batch(argList, fun = "QueueRanked", use_names = TRUE,
 argument of \code{enqueueOnly} and set the value to \code{TRUE} if this argument
 is not detected in all element-lists of \emph{argList}? Defaults to \code{TRUE}.}
 
+\item{enqueue_only}{(optional) A logical vector of length 1. Only enqueue, i.e.
+do not attempt to also pull the report? Defaults to \code{FALSE}.}
+
 \item{...}{(optional) Additional arguments to pass to \link[RSiteCatalyst]{GetReport}}
 }
 \value{
-A (nested) list the same length of \emph{argList} containing the output from
-\code{GetReport}. If \code{use_name = TRUE} and all names within \emph{argList} are
+A list the same length of \emph{argList} containing either the \code{data.frame} output from
+\code{GetReport} or the (\code{integer}) report ID. The latter applies when an error is
+encountered while trying to pull the report, which almost always happens because
+one or more submitted reports requires additional processing time.
+
+If \code{use_names = TRUE} and all names within \emph{argList} are
 present, the output elements will be named using the corresponding (positional) names
 of \emph{argList}.
 
-Additionally, each element will have an attribute called \code{reportID}
+Each \code{data.frame} element will have an attribute called \code{reportID}
 to denote the ID from each respective enqueued report, in the event
-you wish to e.g. re-pull one or more reports.
+you wish to e.g. re-pull one or more reports. \code{integer} elements (i.e. report IDs only)
+will not contain attributes, since this would be redundant (and potentially confusing).
 }
 \description{
 For a list of arguments in the scope of a Queue* function, enqueue and pull data
