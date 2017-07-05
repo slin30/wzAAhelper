@@ -146,7 +146,7 @@ expand_argList <- function(baseList, targName, expandList, how = c("append", "re
     warning(substitute(baseList), " elements are not all named")
   }
   if(!targName %in% names(baseList)) {
-    warning(targName, " not found in ", substitute(baseList),
+    message(targName, " not found in ", substitute(baseList),
             "\rAdding '", targName, "' as an additional argument")
   }
 
