@@ -82,7 +82,7 @@ requesting them. You should expect to wait more than 5 minutes, even when using 
 \examples{
 \dontrun{
 ## Offline-compatible; API access not needed for these two examples
-# only generate an argument list, and do not call the API at all to get 'top'
+# Only generate an argument list, and do not call the API to get 'top'
 enqueue_IdByAccount(
     date.from = "2016-01-01", date.to = Sys.Date(),
     metrics = "visits",
@@ -90,7 +90,7 @@ enqueue_IdByAccount(
     top = 2063,
     construct_only = TRUE
 )
-# only generate an argument list, and do not call the API at all to get 'top'
+# Only generate an argument list, and do not call the API to get 'top'
 # Note that you must use a list if you need to pass in args
 #  to ... that are of length > 1!
 enqueue_IdByAccount(
@@ -103,14 +103,13 @@ enqueue_IdByAccount(
 )
 
 ## API access needed for these examples
-# only generate an argument list, but call the API at all to get 'top'
+# Only generate an argument list and call the API to get 'top'
 enqueue_IdByAccount(
     date.from = "2016-01-01", date.to = Sys.Date(),
     metrics = "visits",
-    reportsuite.id = "elsevier-rx-prod",
-    top = 2063
+    reportsuite.id = "elsevier-rx-prod"
 )
-# Enqueue reports and call the API at all to get 'top'
+# Enqueue reports and call the API to get 'top'
 enqueue_IdByAccount(
     date.from = "2016-01-01", date.to = Sys.Date(),
     metrics = "visits",

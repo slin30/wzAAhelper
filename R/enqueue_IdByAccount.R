@@ -75,7 +75,7 @@
 #' @examples
 #' \dontrun{
 #' ## Offline-compatible; API access not needed for these two examples
-#' # only generate an argument list, and do not call the API at all to get 'top'
+#' # Only generate an argument list, and do not call the API to get 'top'
 #' enqueue_IdByAccount(
 #'     date.from = "2016-01-01", date.to = Sys.Date(),
 #'     metrics = "visits",
@@ -83,7 +83,7 @@
 #'     top = 2063,
 #'     construct_only = TRUE
 #' )
-#' # only generate an argument list, and do not call the API at all to get 'top'
+#' # Only generate an argument list, and do not call the API to get 'top'
 #' # Note that you must use a list if you need to pass in args
 #' #  to ... that are of length > 1!
 #' enqueue_IdByAccount(
@@ -96,14 +96,13 @@
 #' )
 #'
 #' ## API access needed for these examples
-#' # only generate an argument list, but call the API at all to get 'top'
+#' # Only generate an argument list and call the API to get 'top'
 #' enqueue_IdByAccount(
 #'     date.from = "2016-01-01", date.to = Sys.Date(),
 #'     metrics = "visits",
-#'     reportsuite.id = "elsevier-rx-prod",
-#'     top = 2063
+#'     reportsuite.id = "elsevier-rx-prod"
 #' )
-#' # Enqueue reports and call the API at all to get 'top'
+#' # Enqueue reports and call the API to get 'top'
 #' enqueue_IdByAccount(
 #'     date.from = "2016-01-01", date.to = Sys.Date(),
 #'     metrics = "visits",
@@ -160,12 +159,13 @@ enqueue_IdByAccount <- function(..., fun = "QueueRanked", chunk_length = 200L,
   } else {
     top_check_report <- do.call(
       match.fun(fun),
-      c(args_base[names(args_base) != "metrics"],
+      c(args_base[c("date.from", "date.to", "reportsuite.id")],
         list(metrics = c("visits",
                          "cm300000520_57bbb21bec83505f3c442b1d"),
              elements = statics[["elements"]][[1]],
              classification = statics[["classification"]][[1]],
-             top = 1
+             top = 1,
+             validate = FALSE
         )
       )
     )
