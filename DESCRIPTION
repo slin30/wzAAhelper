@@ -10,7 +10,8 @@ Imports:
     purrr,
     wzMisc,
     RSiteCatalyst, 
-    lubridate
+    lubridate,
+    stringr
 Remotes: slin30/wzMisc
 License: GPL-3
 Encoding: UTF-8
