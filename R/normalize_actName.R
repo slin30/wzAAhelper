@@ -14,7 +14,19 @@
 #' calls \code{\link[base]{iconv}} with fixed parameters; see details
 #'
 #' @return
-#' A normalized vector
+#' A normalized vector. With default args, this means the following:
+#'
+#' \enumerate{
+#' \item html markup is stripped, leaving the values intact
+#' \item encoding is set to \code{ASCII}, with non-translatable characters removed
+#' \item only text following the first \code{:} (colon) is preserved, i.e. if any text is
+#'       prefixed with \emph{ae:}, only text after \emph{ae:} will be kept
+#' \item all punctuation is stripped
+#' \item all slashes (forward and back) are stripped
+#' \item all whitespace is normalized, i.s. whitespace runs of length > 1 are converted to single-length runs
+#' \item leading and trailing whitespace is stripped
+#' \item all case is transformed to lowercase
+#' }
 #'
 #' @details
 #' TBD
