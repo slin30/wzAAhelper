@@ -4,6 +4,8 @@
 #'
 #' @importFrom RSiteCatalyst GetQueue
 #'
+#' @param x (optional) integer vector of report IDs to check. If not provided, will use the starting
+#' set found via \code{GetQueue}.
 #' @param base (optional) numeric vector of length 1. The base to use to (exponentially) increment
 #' wait times between iterations. Defaults to \code{2}
 #' @param max_wait (optional) numeric vector of length 1. The max interval, in seconds, to wait between
@@ -35,7 +37,11 @@
 #' check_Queue(base = 1.5) # for shorter time intervals between iterations
 #' check_Queue(max_wait = 60) # cap interval time at 1 minute, regardless of iteration count
 #' }
-check_Queue <- function(base = 2, max_wait = NULL, n = 1L, out = c()) {
+check_Queue <- function(x = NULL, base = 2, max_wait = NULL, n = 1L, out = data.frame()) {
+
+  if(!is.null(x) && !is.integer(x)) {
+    stop("x must be an integer or NULL")
+  }
 
   if(!is.numeric(base)) {
     stop("If provided, 'base' must be a numeric")
@@ -48,12 +54,45 @@ check_Queue <- function(base = 2, max_wait = NULL, n = 1L, out = c()) {
 
   if(!is.data.frame(start_queue)) {
     message(stop_msg)
-    return(invisible(out[out != 0L]))
+    return(invisible(unique(out)))
   }
 
+  curr_x <- start_queue[["reportID"]]
+  if(is.null(x)) {
+    x <- curr_x
+  }
+
+  diff_x <- intersect(curr_x, x)
+
+  if(length(diff_x) == 0L) {
+    message(
+      "no additional values of x found in queue"
+    )
+    return(invisible(unique(out)))
+  }
+
+  diff_df <- data.frame(
+    id = diff_x,
+    completed = time_start,
+    iter = n,
+    stringsAsFactors = FALSE
+  )
+
+  start_queue <- start_queue[start_queue[["reportID"]] %in% diff_x, ]
+
+  # console messages for interactive sessions
   message("----In iter ", n, ":----")
   message(nrow(start_queue), " remaining at current check")
 
+  diff_len <- length(x) - length(diff_x)
+
+  if(diff_len == 0L) {
+    diff_len <- 0L
+  }
+
+  message(paste(diff_len, collapse = ", "), " finished since last check")
+
+  # sleep timing
   next_check <- base[[1]]^n
   if(!is.null(max_wait) && is.numeric(max_wait)) {
     if(next_check > max_wait[[1]]) {
@@ -61,23 +100,11 @@ check_Queue <- function(base = 2, max_wait = NULL, n = 1L, out = c()) {
     }
   }
 
-  message("Next check in ", sprintf("%.02f", next_check), " seconds...")
+  message("Next check in ", sprintf("%.02f", next_check), " seconds...\n")
 
-  if(is.data.frame(start_queue)) {
-    Sys.sleep(next_check)
-    curr_time  <- Sys.time()
-    curr_queue <- GetQueue()
-  } else {
-    return(invisible(out[out!= 0L]))
-  }
+  Sys.sleep(next_check)
 
-  delta <- setdiff(start_queue[["reportID"]], curr_queue[["reportID"]])
-
-  if(length(delta) == 0L) {
-    delta <- 0L
-  }
-
-  message(paste(delta, collapse = ", "), " finished in this check\n")
-
-  check_Queue(base = base, max_wait = max_wait, n = n + 1L, out = c(out, delta))
+  check_Queue(x = diff_x, base = base, max_wait = max_wait, n = n + 1L,
+               out = c(out, diff_x)
+  )
 }

@@ -4,9 +4,13 @@
 \alias{check_Queue}
 \title{Check current queue with messaging}
 \usage{
-check_Queue(base = 2, max_wait = NULL, n = 1L, out = c())
+check_Queue(x = NULL, base = 2, max_wait = NULL, n = 1L,
+  out = data.frame())
 }
 \arguments{
+\item{x}{(optional) integer vector of report IDs to check. If not provided, will use the starting
+set found via \code{GetQueue}.}
+
 \item{base}{(optional) numeric vector of length 1. The base to use to (exponentially) increment
 wait times between iterations. Defaults to \code{2}}
 
