@@ -13,13 +13,14 @@ expand_argList(baseList, targName, expandList, how = c("append", "replace"),
 \item{targName}{chr vector of length 1 denoting what arg to modify, or if name is not found in \emph{baseList},
 what the added element should be named.}
 
-\item{expandList}{list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level.
+\item{expandList}{list or vector of args to expand \code{baseList}. If a list, must be unnested,
+i.e. single-level, unless \emph{ignore_depth} is \code{TRUE} (see below).
 Must be (all) named or (all) unnamed. If named, \code{""} and \code{NA} are not allowed as names.}
 
 \item{how}{\code{append} (default) or \code{replace} \emph{targName} value(s)?}
 
 \item{ignore_depth}{(optional) length 1 logical. Bypass the depth (nesting) check? Useful in certain
-circumstances.}
+circumstances, e.g. when passing inline segments.}
 }
 \value{
 A named nested list of length \emph{expandList}, with each first-level element containing the elements

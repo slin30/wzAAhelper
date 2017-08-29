@@ -5,11 +5,12 @@
 #' @param baseList named list of args. Must be unnested, i.e. single-level
 #' @param targName chr vector of length 1 denoting what arg to modify, or if name is not found in \emph{baseList},
 #'        what the added element should be named.
-#' @param expandList list or vector of args to expand \code{baseList}. If a list, must be unnested, i.e. single-level.
+#' @param expandList list or vector of args to expand \code{baseList}. If a list, must be unnested,
+#'        i.e. single-level, unless \emph{ignore_depth} is \code{TRUE} (see below).
 #'        Must be (all) named or (all) unnamed. If named, \code{""} and \code{NA} are not allowed as names.
 #' @param how \code{append} (default) or \code{replace} \emph{targName} value(s)?
 #' @param ignore_depth (optional) length 1 logical. Bypass the depth (nesting) check? Useful in certain
-#' circumstances.
+#'        circumstances, e.g. when passing inline segments.
 #'
 #' @details
 #' Take a single list of baseline arguments and expand them based on a (named) list or vector of values.
@@ -143,7 +144,7 @@ expand_argList <- function(baseList, targName, expandList, how = c("append", "re
     }
   }
   if(any(names(baseList) == "") | anyNA(names(baseList))) {
-    warning(substitute(baseList), " elements are not all named")
+    stop(substitute(baseList), " elements are not all named")
   }
   if(!targName %in% names(baseList)) {
     message(targName, " not found in ", substitute(baseList),

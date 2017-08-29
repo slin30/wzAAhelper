@@ -7,6 +7,7 @@
 #'
 #' @param baseList named list of args. Must be unnested, i.e. single-level
 #' @param n integer of length 1. Number of partitions to make. \code{numeric} will be coerced via \code{as.integer}
+#' @param len integer of length 1. Length of each partition. Will override \emph{n} if both are provided.
 #' @param chunkLimit optional. Should almost never be used. Controls the upper limit of chunk size for
 #' \link[wzMisc]{make_chunks}. Pre-set to 50K and should be left as-is.
 #'
@@ -75,6 +76,10 @@
 #'
 #' npartition_argList(my_baseList_2, n = 2)
 #'
+#' #With len
+#' npartition_argList(my_baseList, len = 25000) # 4 chunks
+#' npartition_argList(my_baseList, len = 1E6) # failback to chunkLimit of 5E4 len
+#'
 #' #Error if length top != length elements, if length top > 1 OR length elements > 1
 #' \dontrun{
 #'
@@ -102,7 +107,7 @@
 #'
 #' npartition_argList(bad_list_2, n = 2)
 #' }
-npartition_argList <- function(baseList, n, chunkLimit = NULL) {
+npartition_argList <- function(baseList, n = NULL, len = NULL, chunkLimit = NULL) {
   if(is.null(chunkLimit)) {
     chunkLimit <- 5E4
   }
@@ -143,13 +148,37 @@ npartition_argList <- function(baseList, n, chunkLimit = NULL) {
       )
     }
 
-  if(length(n) != 1) {
-    stop("n must be of length 1")
+
+  # identify how you will calc
+  if(!is.null(n) && !is.null(len)) {
+    message("both n and len provided; using len")
+    mech <- "len"
+  } else {
+    chk <- vapply(c("n", "len"), function(f) !is.null(get(f)), logical(1))
+    mech <- names(which(chk))
   }
 
   tot <- as.integer(baseList[["top"]][[1]])
+
+  chunk_size <- as.integer(
+    switch(mech,
+           len = len,
+           n = tot/n
+    )
+  )
+
+  if(length(get("chunk_size")) > 1L) {
+    stop(
+      paste0(
+        "Length of ",
+        substitute(mech),
+        " > 1"
+      )
+    )
+  }
+
   #generate chunk df
-  chunks <- make_chunks(tot, chunk_size = tot/n, limit = chunkLimit)
+  chunks <- make_chunks(tot, chunk_size = chunk_size, limit = chunkLimit)
 
   start_xpandChunk <- as.list(chunks[["from"]])
   top_xpandChunk   <- as.list(chunks[["size"]])

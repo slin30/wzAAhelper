@@ -42,16 +42,16 @@ test_that("an NA name in expandList throws an error", {
   expect_error(expand_argList(my_baseList, "segment.id", xpandLst))
 })
 
-test_that("a blank name in baseList raises a warning", {
+test_that("a blank name in baseList throws an error", {
   baseLst <- my_baseList
   names(baseLst)[1] <- ""
-  expect_warning(expand_argList(baseLst, "segment.id", my_expandList_1))
+  expect_error(expand_argList(baseLst, "segment.id", my_expandList_1))
 })
 
-test_that("an NA name in baseList raises a warning", {
+test_that("an NA name in baseList throws an error", {
   baseLst <- my_baseList
   names(baseLst)[1] <- NA
-  expect_warning(expand_argList(baseLst, "segment.id", my_expandList_1))
+  expect_error(expand_argList(baseLst, "segment.id", my_expandList_1))
 })
 
 test_that("replace option outputs equal length with non-NULL replace", {
