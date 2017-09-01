@@ -8,6 +8,8 @@
 #' or a list of named elements.
 #' @param fun (optional) A quoted function; defaults to \code{QueueRanked} and generally should be
 #' left as such. Not used if \code{construct_only = TRUE}.
+#' @param use_class (optional) Apply the account name clean classification? Defaults to \code{TRUE}.
+#' Set this to \code{FALSE} if your report suite does not have this classification.
 #' @param chunk_length (optional) An integer vector of length 1 denoting the number of rows to pull for
 #' each chunk, based on the first (parent) element (\emph{Account Name}). Defaults to \code{200}.
 #' @param n_ids (optional) An integer vector of length 1 denoting the number of child elements to pull for each
@@ -109,7 +111,8 @@
 #'     reportsuite.id = "elsevier-rx-prod"
 #' )
 #' }
-enqueue_IdByAccount <- function(..., fun = "QueueRanked", chunk_length = 200L,
+enqueue_IdByAccount <- function(..., fun = "QueueRanked", use_class = TRUE,
+                                chunk_length = 200L,
                                 n_ids = 10L, construct_only = FALSE) {
 
   args_coll <- c(...)
@@ -151,6 +154,10 @@ enqueue_IdByAccount <- function(..., fun = "QueueRanked", chunk_length = 200L,
     elements = c("evar7", "prop1"),
     classification = c("Account Name [v2] Clean", "")
   )
+
+  if(!use_class) {
+    statics[["classification"]] <- c("", "")
+  }
 
   # handle top for first element, use if provided, else pull fresh
   if("top" %in% names(args_base)) {

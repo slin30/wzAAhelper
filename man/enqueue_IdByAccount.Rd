@@ -4,8 +4,8 @@
 \alias{enqueue_IdByAccount}
 \title{Get account ids by account name clean}
 \usage{
-enqueue_IdByAccount(..., fun = "QueueRanked", chunk_length = 200L,
-  n_ids = 10L, construct_only = FALSE)
+enqueue_IdByAccount(..., fun = "QueueRanked", use_class = TRUE,
+  chunk_length = 200L, n_ids = 10L, construct_only = FALSE)
 }
 \arguments{
 \item{...}{(required) Named args to pass to fun. Accepts bare named elements, a vector of named elements,
@@ -13,6 +13,9 @@ or a list of named elements.}
 
 \item{fun}{(optional) A quoted function; defaults to \code{QueueRanked} and generally should be
 left as such. Not used if \code{construct_only = TRUE}.}
+
+\item{use_class}{(optional) Apply the account name clean classification? Defaults to \code{TRUE}.
+Set this to \code{FALSE} if your report suite does not have this classification.}
 
 \item{chunk_length}{(optional) An integer vector of length 1 denoting the number of rows to pull for
 each chunk, based on the first (parent) element (\emph{Account Name}). Defaults to \code{200}.}
