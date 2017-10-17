@@ -2,14 +2,12 @@
 #'
 #' Efficiently run a breakdown report, of account ids by account name clean
 #'
-#' @importFrom RSiteCatalyst QueueRanked
+#' @importFrom RSiteCatalyst QueueRanked GetClassifications
 #'
 #' @param ... (required) Named args to pass to fun. Accepts bare named elements, a vector of named elements,
 #' or a list of named elements.
 #' @param fun (optional) A quoted function; defaults to \code{QueueRanked} and generally should be
 #' left as such. Not used if \code{construct_only = TRUE}.
-#' @param use_class (optional) Apply the account name clean classification? Defaults to \code{TRUE}.
-#' Set this to \code{FALSE} if your report suite does not have this classification.
 #' @param chunk_length (optional) An integer vector of length 1 denoting the number of rows to pull for
 #' each chunk, based on the first (parent) element (\emph{Account Name}). Defaults to \code{200}.
 #' @param n_ids (optional) An integer vector of length 1 denoting the number of child elements to pull for each
@@ -25,7 +23,7 @@
 #' @details
 #' The purpose of this function is to streamline the otherwise lengthy process of pulling down
 #' account ids by account name (clean). This function does so by chunking the call across
-#' the total number of account names (clean) into \emph{chunk_length}-long pieces, i.e. \code{200}-
+#' the total number of account names (possibly clean) into \emph{chunk_length}-long pieces, i.e. \code{200}-
 #' row requests (by default).
 #'
 #' \code{...} should consist of your basic query parameters, and the following must be present:
@@ -51,6 +49,10 @@
 #' \item \code{elements = c("evar7", "prop1")}
 #' \item \code{classification = c("Account Name [v2] Clean", "")}
 #' }
+#'
+#' If your report suite does not have the default first (only) classification of \code{Account Name [v2] Clean},
+#' the value is set to blank i.e. \code{""}. This is handled automatically by a call to
+#' \link[RSiteCatalyst]{GetClassifications}.
 #'
 #' Note that if you pass any arguments of \code{fun} that are vectors of length > 1, you must do so
 #' as a \code{list}, else the key-value structure will be corrputed by \code{c()}, which is called on
@@ -111,9 +113,9 @@
 #'     reportsuite.id = "elsevier-rx-prod"
 #' )
 #' }
-enqueue_IdByAccount <- function(..., fun = "QueueRanked", use_class = TRUE,
-                                chunk_length = 200L,
-                                n_ids = 10L, construct_only = FALSE) {
+enqueue_IdByAccount <- function(..., fun = "QueueRanked",
+                                chunk_length = 200L, n_ids = 10L,
+                                construct_only = FALSE) {
 
   args_coll <- c(...)
 
@@ -124,7 +126,6 @@ enqueue_IdByAccount <- function(..., fun = "QueueRanked", use_class = TRUE,
   } else {
     args_base <- list(...)
   }
-
 
   # if any named elements within static names present, remove them
   static_nms <- c("elements", "classification")
@@ -149,15 +150,25 @@ enqueue_IdByAccount <- function(..., fun = "QueueRanked", use_class = TRUE,
 
   args_base[c("date.from", "date.to")] <- .fix_date(args_base[c("date.from", "date.to")])
 
-  # define static vars
-  statics <- list(
-    elements = c("evar7", "prop1"),
-    classification = c("Account Name [v2] Clean", "")
-  )
+  # define static elements
+  el_1 <- "evar7"
+  el_2 <- "prop1"
 
-  if(!use_class) {
-    statics[["classification"]] <- c("", "")
+  cs_1 <- "Account Name [v2] Clean"
+  cs_2 <- ""
+
+  # check if we can use classification at all
+  class_exists <- .check_classification(rsid = args_base[["reportsuite.id"]],
+                                        element = el_1)
+  if(!class_exists) {
+    cs_1 <- ""
   }
+
+  # create static elements-class list
+  statics <- list(
+    elements = c(el_1, el_2),
+    classification = c(cs_1, cs_2)
+  )
 
   # handle top for first element, use if provided, else pull fresh
   if("top" %in% names(args_base)) {
@@ -185,7 +196,9 @@ enqueue_IdByAccount <- function(..., fun = "QueueRanked", use_class = TRUE,
     args_base,
     statics
   )
-
+  # prevent args passed to ... from becoming part of query
+  fun_args <- names(formals(fun))
+  full_argList <- full_argList[intersect(fun_args, names(full_argList))]
 
   n_lim <- ceiling(as.integer(full_argList[["top"]][[1]])/chunk_length)
 
@@ -213,4 +226,25 @@ NULL
 
   x[!ok] <- fixed
   x
+}
+
+NULL
+.check_classification <- function(rsid, element) {
+
+  if(length(element) > 1L) {
+    stop("element must be a character vector of length 1")
+  }
+
+  out <- tryCatch(
+    {
+      GetClassifications(rsid, element)
+    },
+    error = function(e) {
+      invisible(e)
+      NULL
+    },
+    finally = NULL
+  )
+
+  !is.null(out)
 }

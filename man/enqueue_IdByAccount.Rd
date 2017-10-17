@@ -4,8 +4,8 @@
 \alias{enqueue_IdByAccount}
 \title{Get account ids by account name clean}
 \usage{
-enqueue_IdByAccount(..., fun = "QueueRanked", use_class = TRUE,
-  chunk_length = 200L, n_ids = 10L, construct_only = FALSE)
+enqueue_IdByAccount(..., fun = "QueueRanked", chunk_length = 200L,
+  n_ids = 10L, construct_only = FALSE)
 }
 \arguments{
 \item{...}{(required) Named args to pass to fun. Accepts bare named elements, a vector of named elements,
@@ -13,9 +13,6 @@ or a list of named elements.}
 
 \item{fun}{(optional) A quoted function; defaults to \code{QueueRanked} and generally should be
 left as such. Not used if \code{construct_only = TRUE}.}
-
-\item{use_class}{(optional) Apply the account name clean classification? Defaults to \code{TRUE}.
-Set this to \code{FALSE} if your report suite does not have this classification.}
 
 \item{chunk_length}{(optional) An integer vector of length 1 denoting the number of rows to pull for
 each chunk, based on the first (parent) element (\emph{Account Name}). Defaults to \code{200}.}
@@ -37,7 +34,7 @@ Efficiently run a breakdown report, of account ids by account name clean
 \details{
 The purpose of this function is to streamline the otherwise lengthy process of pulling down
 account ids by account name (clean). This function does so by chunking the call across
-the total number of account names (clean) into \emph{chunk_length}-long pieces, i.e. \code{200}-
+the total number of account names (possibly clean) into \emph{chunk_length}-long pieces, i.e. \code{200}-
 row requests (by default).
 
 \code{...} should consist of your basic query parameters, and the following must be present:
@@ -63,6 +60,10 @@ with the default arguments, namely
 \item \code{elements = c("evar7", "prop1")}
 \item \code{classification = c("Account Name [v2] Clean", "")}
 }
+
+If your report suite does not have the default first (only) classification of \code{Account Name [v2] Clean},
+the value is set to blank i.e. \code{""}. This is handled automatically by a call to
+\link[RSiteCatalyst]{GetClassifications}.
 
 Note that if you pass any arguments of \code{fun} that are vectors of length > 1, you must do so
 as a \code{list}, else the key-value structure will be corrputed by \code{c()}, which is called on
